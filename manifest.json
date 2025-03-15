@@ -1,0 +1,10 @@
+{
+    "name": "Insta kid extension",
+    "description": "This extension is mainly for a instagram content ristriction for a kids",
+    "manifest_version": 3,
+    "version": "0.0.1",
+    "action": {
+        "default_popup": "index.html",
+        "default_tile": "Click here"
+    }
+}
