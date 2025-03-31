@@ -1,30 +1,29 @@
 {
-    "name": "Insta kid extension",
-    "description": "This extension is mainly for an instagram content ristriction for a kids",
     "manifest_version": 3,
+    "name": "Instagram-kid-extension",
+    "description": "The extension safeguards children and users who prefer to avoid adult or violent content while scrolling through Instagram Reels.",
     "version": "0.0.1",
     "action": {
-        "default_popup": "html/popup.html",
-        "default_tite": "Click here"
+        "default_popup": "index.html"
+    },
+    "background": {
+        "service_worker": "src/backgroundScript/backgroundScript.ts",
+        "type": "module"
     },
     "content_scripts": [
         {
             "js": [
-                "scripts/content.js"
+                "src/content.tsx"
             ],
             "matches": [
                 "https://*.instagram.com/*"
             ]
         }
     ],
-    "background": {
-        "service_worker": "scripts/background.js"
-    },
     "permissions": [
-        "webNavigation",
         "tabs",
         "activeTab",
-        "scripting"
+        "webNavigation"
     ],
     "host_permissions": [
         "https://*.instagram.com/*",
