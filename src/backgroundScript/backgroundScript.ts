@@ -32,3 +32,9 @@ chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
         sendUrlToActiveTab(details.url, details.tabId);
     }
 });
+
+chrome.runtime.onMessage.addListener((message) => {
+    if (message.action === "reloadTab" && message.tabId) {
+        chrome.tabs.reload(message.tabId);
+    }
+});

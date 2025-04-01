@@ -6,6 +6,16 @@ function App() {
 
   const [ageLimit, setAgeLimit] = React.useState<number>(0);
 
+  async function handleRefreshTheCurrentTab() {
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      currentWindow: true,
+    });
+    if (tab && tab.id) {
+      chrome.runtime.sendMessage({ action: "reloadTab", tabId: tab.id });
+    }
+  }
+
   function handleSetAgeLimitOnChange(n: number) {
     chrome.storage.sync.set({ ageLimit: n });
     setAgeLimit(n);
@@ -91,7 +101,9 @@ function App() {
           justifyContent: "center",
         }}
       >
-        <button className={styles.saveBtn}>Save</button>
+        <button className={styles.saveBtn} onClick={handleRefreshTheCurrentTab}>
+          Save
+        </button>
       </div>
     </div>
   );
