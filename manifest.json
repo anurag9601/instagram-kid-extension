@@ -24,7 +24,8 @@
     "permissions": [
         "tabs",
         "activeTab",
-        "webNavigation"
+        "webNavigation",
+        "storage"
     ],
     "host_permissions": [
         "https://*.instagram.com/*",

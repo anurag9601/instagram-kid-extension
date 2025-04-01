@@ -11,6 +11,20 @@ root.style.width = "100%";
 root.style.transform = "translate(-50%)";
 document.body.append(root);
 
+chrome.storage.sync.get(["reelOptionVisible"], (response) => {
+  const reelsDiv: any = document.querySelector('a[href="/reels/"]');
+  const exploreDiv: any = document.querySelector('a[href="/explore/"]');
+
+  if (response.reelOptionVisible === true) {
+    if (reelsDiv) {
+      reelsDiv.style.display = "none";
+    }
+    if (exploreDiv) {
+      exploreDiv.style.display = "none";
+    }
+  }
+});
+
 createRoot(root).render(
   <StrictMode>
     <ContentScript />
