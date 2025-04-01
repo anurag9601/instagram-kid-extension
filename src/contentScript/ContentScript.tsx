@@ -101,10 +101,10 @@ const ContentScript = () => {
 
               if (reelAgeLimit > ageLimitRef.current) {
                 const observer = new MutationObserver(() => {
-                  const reelVideos = document.querySelectorAll("video");
-                  reelVideos.forEach((video) => {
-                    video.style.display = "none";
-                  });
+                  const reelVideos = document.querySelector("video");
+                  if (reelVideos) {
+                    reelVideos.style.display = "none";
+                  }
                 });
                 observer.observe(document.body, {
                   childList: true,

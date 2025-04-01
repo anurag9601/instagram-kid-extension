@@ -4,7 +4,11 @@
     "description": "The extension safeguards children and users who prefer to avoid adult or violent content while scrolling through Instagram Reels.",
     "version": "0.0.1",
     "action": {
-        "default_popup": "index.html"
+        "default_popup": "index.html",
+        "default_icon": "public/insta-kid.png"
+    },
+    "icons": {
+        "128": "public/insta-kid.png"
     },
     "background": {
         "service_worker": "src/backgroundScript/backgroundScript.ts",
