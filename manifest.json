@@ -17,7 +17,8 @@
             ],
             "matches": [
                 "https://*.instagram.com/*"
-            ]
+            ],
+            "run_at": "document_idle"
         }
     ],
     "permissions": [

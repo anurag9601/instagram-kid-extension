@@ -1,0 +1,78 @@
+.popupContainer{
+    height: 100%;
+    width: 100%;
+    background-color: #e9c46a;
+    border-radius: 10px;
+}
+
+.popupNoReelOption{
+    display: flex;
+    align-items: start;
+    gap: 20px;
+    padding: 10px 10px;
+}
+
+.popupNoReelOption input{
+    min-height: 15px;
+    min-width: 15px;
+    background-color: #000;
+    border: 1px dashed aliceblue;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.popupNoReelOption p{
+    text-align: justify;
+    color: #000;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.popupContainer hr{
+    border: none;
+    outline: none;
+    height: 1px;
+    width: 100%;
+    background-color: #000;
+}
+
+.ageOptionsContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+    padding: 10px 35px;
+}
+
+.ageHead{
+    font-size: 15px;
+    color: #000;
+    font-weight: 600;
+    list-style: none;
+}
+
+.ageSelectOption{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+    font-size: 13px;
+    color: #000;
+}
+
+.ageSelectOption input{
+    min-height: 17px;
+    min-width: 17px;
+    background-color: #000;
+    border: 1px dashed aliceblue;
+    margin-top: 15px;
+    cursor: pointer;
+}
+
+.saveBtn{
+    width: 80%;
+    margin-bottom: 10px;
+}

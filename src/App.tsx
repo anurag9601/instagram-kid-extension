@@ -1,35 +1,47 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import styles from "./App.module.css";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
+    <div className={styles.popupContainer}>
+      <div className={styles.popupNoReelOption}>
+        <input type="checkbox" />
         <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
+          If you want to remove the Reels option from your Instagram experience,
+          simply check the box and click "Save" to apply the changes.
         </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      <hr />
+      <ul className={styles.ageOptionsContainer}>
+        <li className={styles.ageHead}>Age between</li>
+        <li className={styles.ageSelectOption}>
+          <input type="checkbox" name="" id="" />
+          1-5
+        </li>
+        <li className={styles.ageSelectOption}>
+          <input type="checkbox" name="" id="" />
+          5-10
+        </li>
+        <li className={styles.ageSelectOption}>
+          <input type="checkbox" name="" id="" />
+          10-15
+        </li>
+        <li className={styles.ageSelectOption}>
+          <input type="checkbox" name="" id="" />
+          15-18
+        </li>
+      </ul>
+      <div
+        style={{
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <button className={styles.saveBtn}>Save</button>
+      </div>
+    </div>
+  );
 }
 
-export default App
+export default App;
