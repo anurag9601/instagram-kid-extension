@@ -1,5 +1,4 @@
-// import { GoogleGenAI } from "@google/genai";
-import Groq from "groq-sdk";
+import { GoogleGenAI } from "@google/genai";
 import React from "react";
 import styles from "./ContentScript.module.css";
 
@@ -19,19 +18,14 @@ const ContentScript = () => {
     null
   );
 
-  const [requestReels, setRequestReels] = React.useState<
-    { [key: string]: JSONDataType }[]
-  >([]);
+  const [requestReels, setRequestReels] = React.useState<{
+    [key: string]: JSONDataType;
+  }>({});
 
   const ageLimitRef = React.useRef<number>(0);
 
-  // const ai = new GoogleGenAI({
-  //   apiKey: import.meta.env.VITE_GEMINI_API_KEY as string,
-  // });
-
-  const groq = new Groq({
-    apiKey: import.meta.env.VITE_GROQ_API_KEY,
-    dangerouslyAllowBrowser: true,
+  const ai = new GoogleGenAI({
+    apiKey: import.meta.env.VITE_GEMINI_API_KEY as string,
   });
 
   async function getRealJSON(response: string) {
@@ -47,20 +41,14 @@ const ContentScript = () => {
 
   async function scanReelURL(url: string) {
     if (isInProcess.current) {
-      console.log("A request is already in process. Ignoring new requests...");
       return;
     }
 
-    const requestAlreadyDone = requestReels.find((obj) =>
-      obj.hasOwnProperty(url)
-    );
-
     isInProcess.current = true;
 
-    if (requestAlreadyDone) {
-      setCurrentJSON(null);
-
-      setCurrentJSON(requestAlreadyDone[url]);
+    if (requestReels[url]) {
+      console.log("Response was already in history 🚀🚀");
+      setCurrentJSON(requestReels[url]);
     } else {
       const PROMPT = `You are an Instagram Reel Recognition AI Agent that analyzes reels using their URLs to determine if the content is adult-oriented, whether children can watch it, and the minimum recommended age for viewers. 
       
@@ -73,43 +61,29 @@ const ContentScript = () => {
       Current reel url: ${url}`;
 
       try {
-        // const response = await ai.models.generateContent({
-        //   model: "gemini-2.0-flash",
-        //   contents: PROMPT,
-        // });
-
-        const response = await groq.chat.completions.create({
-          messages: [
-            {
-              role: "user",
-              content: PROMPT,
-            },
-          ],
-          model: "llama-3.3-70b-versatile",
+        const response = await ai.models.generateContent({
+          model: "gemini-2.0-flash",
+          contents: PROMPT,
         });
 
-        if (response.choices[0]?.message?.content) {
-          const realJSON = await getRealJSON(
-            response.choices[0]?.message?.content
-          );
+        if (response.text) {
+          const realJSON = await getRealJSON(response.text);
 
-          setRequestReels((prev) => [...prev, { url: realJSON }]);
+          setRequestReels((prev) => ({
+            ...prev,
+            [url]: realJSON,
+          }));
 
           if (/\d/.test(realJSON.age_limit) && ageLimitRef.current > 0) {
             try {
               const reelAgeLimit = parseInt(realJSON.age_limit.split("+")[0]);
 
               if (reelAgeLimit > ageLimitRef.current) {
-                const observer = new MutationObserver(() => {
-                  const reelVideos = document.querySelector("video");
-                  if (reelVideos) {
-                    reelVideos.style.display = "none";
-                  }
-                });
-                observer.observe(document.body, {
-                  childList: true,
-                  subtree: true,
-                });
+                console.log("This content is above age limit 🙈.");
+              } else {
+                console.log(
+                  `This is watchable content because it is not more then your age limit ${ageLimitRef.current} reel age limit is ${reelAgeLimit}`
+                );
               }
             } catch (err) {
               console.error("Something went wrong", err);
@@ -117,31 +91,6 @@ const ContentScript = () => {
           }
           setCurrentJSON(realJSON);
         }
-
-        // if (response.text) {
-        //   const realJSON = await getRealJSON(response.text);
-
-        //   console.log(realJSON);
-
-        //   setRequestReels((prev) => [...prev, { url: realJSON }]);
-
-        //   if (/\d/.test(realJSON.age_limit) && ageLimitRef.current > 0) {
-        //     try {
-        //       const reelAgeLimit = parseInt(realJSON.age_limit.split("+")[0]);
-
-        //       if (reelAgeLimit > ageLimitRef.current) {
-        //         const h1 = document.createAttribute("h1");
-        //         h1.textContent = "This content is not for you";
-        //         document.body.append(h1);
-        //       } else {
-        //         document.body.removeAttribute("h1");
-        //       }
-        //     } catch (err) {
-        //       console.error("Something went wrong", err);
-        //     }
-        //   }
-        //   setCurrentJSON(realJSON);
-        // }
       } catch (error: any) {
         console.error("Error:", error.message);
       }
@@ -152,11 +101,12 @@ const ContentScript = () => {
 
   chrome.runtime.onMessage.addListener(async (message) => {
     setAnalysisWindowOpen(() => message.url && message.url.includes("reels"));
-    if (message.url) {
+    if (message.url && message.url.includes("/reels")) {
       const timeOut = setTimeout(async () => {
+        setCurrentJSON(null);
         await scanReelURL(message.url);
         clearTimeout(timeOut);
-      }, 500);
+      }, 300);
     }
   });
 
